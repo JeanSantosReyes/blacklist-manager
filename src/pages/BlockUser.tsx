@@ -1,62 +1,94 @@
 import { useNavigate } from 'react-router-dom';
-import { actionBlock } from '../services';
+import { addCustomerToBlacklist } from '../services';
+import { useState } from 'react';
+import { Phone, UserCircle } from 'lucide-react';
 
 const BlockUser: React.FC = () => {
 
-    const navigate = useNavigate();
+    interface FormData {
+        name: string;
+        number: string;
+    }
 
-    // eslint-disable-next-line
-    const addBlock = (number: string) => {
-        actionBlock('add', number)
+    const navigate = useNavigate();
+    const [formData, setFormData] = useState<FormData>({
+        name: '',
+        number: '',
+    });
+
+    const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+        e.preventDefault();
+        addCustomerToBlacklist(formData)
+            .then(res => console.log(res))
             .catch(error => console.log(error))
             .finally(() => navigate('/'))
     }
 
     return (
-        <>
-            {/* Sección de hero */}
-            <section className='hero bg-primary text-white text-center d-flex align-items-center justify-content-center' style={{ height: '90vh' }}>
-                <div>
-                    <h1>Transformamos ideas en realidades</h1>
-                    <p className='lead'>Desarrollamos soluciones tecnológicas personalizadas para tu negocio</p>
-                    <a href='#services' className='btn btn-light btn-lg'>Descubre más</a>
-                </div>
-            </section>
+        <div className="container py-5">
+            <div className="form-container">
+                <div className="card">
+                    <div className="card-body">
+                        <div className="text-center mb-4">
+                            <h1 className="h2 mb-3">Blacklist</h1>
+                            <p className="text-muted">
+                                Agrega clientes a la lista negra
+                            </p>
+                        </div>
 
-            {/* Sección de servicios */}
-            <section id='services' className='container my-5'>
-                <div className='text-center mb-5'>
-                    <h2>Nuestros Servicios</h2>
-                    <p className='lead'>Ofrecemos una gama completa de servicios tecnológicos para satisfacer tus necesidades</p>
+                        <form onSubmit={handleSubmit}>
+                            <div className="mb-4">
+                                <label htmlFor="name" className="form-label">
+                                    Nombre
+                                </label>
+                                <div className="input-group">
+                                    <span className="input-group-text">
+                                        <UserCircle size={20} />
+                                    </span>
+                                    <input
+                                        type="text"
+                                        className="form-control"
+                                        id="name"
+                                        value={formData.name}
+                                        onChange={(e) =>
+                                            setFormData({ ...formData, name: e.target.value })
+                                        }
+                                        placeholder="John Doe"
+                                        required
+                                    />
+                                </div>
+                            </div>
+
+                            <div className="mb-4">
+                                <label htmlFor="number" className="form-label">
+                                    Número de teléfono
+                                </label>
+                                <div className="input-group">
+                                    <span className="input-group-text">
+                                        <Phone size={20} />
+                                    </span>
+                                    <input
+                                        type="tel"
+                                        className="form-control"
+                                        id="number"
+                                        value={formData.number}
+                                        onChange={(e) =>
+                                            setFormData({ ...formData, number: e.target.value })
+                                        }
+                                        placeholder="593 XXX XXX XXXX"
+                                        required
+                                    />
+                                </div>
+                            </div>
+
+                            <button type="submit" className="btn btn-primary w-100">
+                                Guardar
+                            </button>
+                        </form>
+                    </div>
                 </div>
-                <div className='row text-center'>
-                    <div className='col-md-4'>
-                        <div className='card shadow-sm'>
-                            <div className='card-body'>
-                                <h3 className='card-title'>Desarrollo de Software</h3>
-                                <p className='card-text'>Creamos aplicaciones a medida para optimizar tus procesos y mejorar tu productividad.</p>
-                            </div>
-                        </div>
-                    </div>
-                    <div className='col-md-4'>
-                        <div className='card shadow-sm'>
-                            <div className='card-body'>
-                                <h3 className='card-title'>Consultoría TI</h3>
-                                <p className='card-text'>Te ayudamos a implementar la mejor estrategia tecnológica para tu negocio.</p>
-                            </div>
-                        </div>
-                    </div>
-                    <div className='col-md-4'>
-                        <div className='card shadow-sm'>
-                            <div className='card-body'>
-                                <h3 className='card-title'>Ciberseguridad</h3>
-                                <p className='card-text'>Protege tu empresa con nuestras soluciones avanzadas en seguridad informática.</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </section>
-        </>
+            </div>
+        </div>
     )
 }
 export default BlockUser

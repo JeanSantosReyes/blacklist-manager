@@ -1,9 +1,13 @@
 import API from '../api';
 
-export const getAll = () => {
-    return API.get('/blacklist');
+export const addCustomerToBlacklist = (customer: { name: string, number: string }) => {
+    return API.post('/blacklist', customer)
 }
 
-export const actionBlock = (intent: string, number: string) => {
-    return API.post('/blacklist', { intent, number });
+export const deleteCustomerByNumber = (number: string) => {
+    return API.delete('/blacklist', { data: { number } });
+}
+
+export const getBlacklist = () => {
+    return API.get('/blacklist');
 }

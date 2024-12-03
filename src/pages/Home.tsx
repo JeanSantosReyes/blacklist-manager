@@ -1,5 +1,5 @@
 import { FC, useEffect, useState } from 'react';
-import { actionBlock, getAll } from '../services';
+import { deleteCustomerByNumber, getBlacklist } from '../services';
 import { DebouncedInput } from '../components';
 import { ChevronDown, ChevronLeft, ChevronRight, ChevronsLeft, ChevronsRight, ChevronUp, Trash2 } from 'lucide-react';
 import {
@@ -31,14 +31,14 @@ const Home: FC = () => {
     }, []);
 
     const retrieveBlackList = () => {
-        getAll()
+        getBlacklist()
             .then(({ data }) => {
                 setList(data);
             })
             .catch(e => console.log(e))
     }
 
-    const removeBlock = (contact: string) => {
+    const deteleCustomer = (number: string) => {
         Swal.fire({
             title: '¿Estás seguro?',
             text: 'Removerás el bloqueo del contacto.',
@@ -50,7 +50,7 @@ const Home: FC = () => {
             confirmButtonText: 'Si, remover bloqueo'
         }).then((result) => {
             if (result.isConfirmed) {
-                actionBlock('remove', contact)
+                deleteCustomerByNumber(number)
                     .catch(error => console.log(error))
                     .finally(() => retrieveBlackList())
                 Swal.fire({ title: 'Bloqueo removido', icon: 'success' });
@@ -76,7 +76,7 @@ const Home: FC = () => {
             header: 'Remover',
             cell: ({ getValue }) => (
                 <div className='d-flex justify-content-center'>
-                    <button className='btn btn-danger' onClick={() => removeBlock(getValue())}>
+                    <button className='btn btn-danger' onClick={() => deteleCustomer(getValue())}>
                         <Trash2 />
                     </button>
                 </div>
