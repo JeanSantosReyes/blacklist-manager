@@ -1,4 +1,4 @@
-const Info: React.FC = () => {
+const InfoPage: React.FC = () => {
     return (
         <div className='card'>
             <div className='card-body text-center py-5'>
@@ -8,4 +8,4 @@ const Info: React.FC = () => {
         </div>
     )
 }
-export default Info
+export default InfoPage

@@ -1,7 +1,10 @@
 import { FC, useEffect, useState } from 'react';
 import { deleteCustomerByNumber, getBlacklist } from '../services';
 import { DebouncedInput } from '../components';
-import { ChevronDown, ChevronLeft, ChevronRight, ChevronsLeft, ChevronsRight, ChevronUp, Trash2 } from 'lucide-react';
+import {
+    ChevronDown, ChevronLeft, ChevronRight,
+    ChevronsLeft, ChevronsRight, ChevronUp, Trash2
+} from 'lucide-react';
 import {
     createColumnHelper,
     flexRender,
@@ -18,7 +21,7 @@ type IAPI = {
     number: string;
 }
 
-const Home: FC = () => {
+const HomePage: FC = () => {
 
     // eslint-disable-next-line
     const [pagination, setPagination] = useState({ pageIndex: 0, pageSize: 10 });
@@ -208,4 +211,4 @@ const Home: FC = () => {
         </>
     )
 }
-export default Home;
+export default HomePage

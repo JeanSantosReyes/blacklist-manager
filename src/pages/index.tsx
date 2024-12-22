@@ -1,3 +1,4 @@
-export { default as BlockUser } from './BlockUser';
-export { default as Home } from './Home';
-export { default as Info } from './Info';
+export { default as AuthPage } from './AuthPage';
+export { default as BlockUserPage } from './BlockUserPage';
+export { default as HomePage } from './HomePage';
+export { default as InfoPage } from './InfoPage';

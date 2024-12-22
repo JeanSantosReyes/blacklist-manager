@@ -1,9 +1,9 @@
 import { useNavigate } from 'react-router-dom';
 import { addCustomerToBlacklist } from '../services';
-import { useState } from 'react';
+import { FC, useState } from 'react';
 import { Phone, UserCircle } from 'lucide-react';
 
-const BlockUser: React.FC = () => {
+const BlockUserPage: FC = () => {
 
     interface FormData {
         name: string;
@@ -19,7 +19,6 @@ const BlockUser: React.FC = () => {
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         addCustomerToBlacklist(formData)
-            .then(res => console.log(res))
             .catch(error => console.log(error))
             .finally(() => navigate('/'))
     }
@@ -81,7 +80,11 @@ const BlockUser: React.FC = () => {
                                 </div>
                             </div>
 
-                            <button type="submit" className="btn btn-primary w-100">
+                            <button
+                                type="submit"
+                                className="btn w-100"
+                                style={{ backgroundColor: '#2c2c54', color: 'white' }}
+                            >
                                 Guardar
                             </button>
                         </form>
@@ -91,4 +94,4 @@ const BlockUser: React.FC = () => {
         </div>
     )
 }
-export default BlockUser
+export default BlockUserPage
