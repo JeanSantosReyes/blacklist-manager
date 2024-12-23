@@ -1,11 +1,9 @@
 import { useEffect, useRef, useState } from 'react';
 import { Navigate, Route, Routes } from 'react-router-dom';
 import { MainContent, Sidebar } from './components';
-import { useAuth } from './context';
-import { AuthPage, BlockUserPage, HomePage, InfoPage } from './pages';
+import { BlockUserPage, HomePage, InfoPage } from './pages';
 
 export const App = () => {
-  const { auth } = useAuth();
   const [sidebarVisible, setSidebarVisible] = useState(false);
   const sidebarRef = useRef<HTMLDivElement>(null);
 
@@ -40,23 +38,16 @@ export const App = () => {
   };
 
   return (
-    !auth ? (
-      <Routes>
-        <Route path='/auth' element={<AuthPage />} />
-        <Route path='/*' element={<Navigate to='/auth' replace />} />
-      </Routes>
-    ) : (
-      <div className='d-flex'>
-        <Sidebar visible={sidebarVisible} ref={sidebarRef} onItemClick={closeSidebarOnSmallScreens} />
-        <MainContent toggleSidebar={toggleSidebar}>
-          <Routes>
-            <Route path='/app' element={<HomePage />} />
-            <Route path='/block' element={<BlockUserPage />} />
-            <Route path='/info' element={<InfoPage />} />
-            <Route path='/*' element={<Navigate to='/app' replace />} />
-          </Routes>
-        </MainContent>
-      </div>
-    )
+    <div className='d-flex'>
+      <Sidebar visible={sidebarVisible} ref={sidebarRef} onItemClick={closeSidebarOnSmallScreens} />
+      <MainContent toggleSidebar={toggleSidebar}>
+        <Routes>
+          <Route path='/app' element={<HomePage />} />
+          <Route path='/block' element={<BlockUserPage />} />
+          <Route path='/info' element={<InfoPage />} />
+          <Route path='/*' element={<Navigate to='/app' replace />} />
+        </Routes>
+      </MainContent>
+    </div>
   )
 }
