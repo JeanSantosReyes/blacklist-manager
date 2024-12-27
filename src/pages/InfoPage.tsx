@@ -2,7 +2,7 @@ const InfoPage: React.FC = () => {
     return (
         <div className='container'>
             <header className='text-center py-1'>
-                <h1>Administración de Blacklist</h1>
+                <h1>Blacklist</h1>
             </header>
             <main className='my-3'>
                 <p>

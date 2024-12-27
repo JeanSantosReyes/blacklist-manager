@@ -33,3 +33,7 @@ body {
     padding: 0;
   }
 }
+
+.swal-title-custom {
+  font-size: 20px;
+}

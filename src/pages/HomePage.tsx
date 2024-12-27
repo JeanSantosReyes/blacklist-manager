@@ -23,7 +23,7 @@ type IAPI = {
 
 const HomePage: FC = () => {
 
-    // eslint-disable-next-line
+    const [isLoading, setIsLoading] = useState<boolean>(true);
     const [pagination, setPagination] = useState({ pageIndex: 0, pageSize: 10 });
     const [list, setList] = useState<IAPI[]>([]);
     const [globalFilter, setGlobalFilter] = useState<string>('');
@@ -34,11 +34,13 @@ const HomePage: FC = () => {
     }, []);
 
     const retrieveBlackList = () => {
+        setIsLoading(true);
         getBlacklist()
             .then(({ data }) => {
                 setList(data);
             })
             .catch(e => console.log(e))
+            .finally(() => setIsLoading(false))
     }
 
     const deteleCustomer = (number: string) => {
@@ -111,103 +113,115 @@ const HomePage: FC = () => {
                 className='p-2 mb-3 form-control shadow'
                 placeholder='Buscar contacto...'
             />
-            <table className='table table-hover table-bordered align-middle'>
-                <thead className='table-light'>
-                    {
-                        table.getHeaderGroups().map(headerGroup => (
-                            <tr key={headerGroup.id}>
-                                {
-                                    headerGroup.headers.map(header => {
-                                        return (
-                                            <th key={header.id} colSpan={header.colSpan} className='text-center'>
-                                                {
-                                                    header.isPlaceholder ? null : (
-                                                        <div {...{
-                                                            onClick: header.column.getToggleSortingHandler(),
-                                                            role: 'button'
-                                                        }}>
-                                                            {
-                                                                flexRender(
-                                                                    header.column.columnDef.header,
-                                                                    header.getContext()
-                                                                )
-                                                            }
-                                                            {
-                                                                {
-                                                                    asc: <>{' '}<ChevronUp /></>,
-                                                                    desc: <>{' '}<ChevronDown /></>
-                                                                }
-                                                                [header.column.getIsSorted() as string] ?? null
-                                                            }
-                                                        </div>
-                                                    )
-                                                }
-                                            </th>
-                                        )
-                                    })
-                                }
-                            </tr>
-                        ))
-                    }
-                </thead>
-                <tbody>
-                    {
-                        table.getRowModel().rows.map(row => (
-                            <tr key={row.id}>
-                                {
-                                    row.getVisibleCells().map(cell => (
-                                        <td key={cell.id}>
-                                            {
-                                                flexRender(
-                                                    cell.column.columnDef.cell,
-                                                    cell.getContext()
+            {
+                isLoading ? (
+                    <div className='d-flex justify-content-center align-items-center mt-5'>
+                        <div className="spinner-border" role="status">
+                            <span className="visually-hidden">Loading...</span>
+                        </div>
+                    </div>
+                ) : (
+                    <table className='table table-hover table-bordered align-middle'>
+                        <thead className='table-light'>
+                            {
+                                table.getHeaderGroups().map(headerGroup => (
+                                    <tr key={headerGroup.id}>
+                                        {
+                                            headerGroup.headers.map(header => {
+                                                return (
+                                                    <th key={header.id} colSpan={header.colSpan} className='text-center'>
+                                                        {
+                                                            header.isPlaceholder ? null : (
+                                                                <div {...{
+                                                                    onClick: header.column.getToggleSortingHandler(),
+                                                                    role: 'button'
+                                                                }}>
+                                                                    {
+                                                                        flexRender(
+                                                                            header.column.columnDef.header,
+                                                                            header.getContext()
+                                                                        )
+                                                                    }
+                                                                    {
+                                                                        {
+                                                                            asc: <>{' '}<ChevronUp /></>,
+                                                                            desc: <>{' '}<ChevronDown /></>
+                                                                        }
+                                                                        [header.column.getIsSorted() as string] ?? null
+                                                                    }
+                                                                </div>
+                                                            )
+                                                        }
+                                                    </th>
                                                 )
-                                            }
-                                        </td>
-                                    ))
-                                }
-                            </tr>
-                        ))
-                    }
-                </tbody>
-            </table>
-            <div className='d-flex align-items-center justify-content-center gap-2 mb-4'>
-                <button
-                    className='border rounded p-1'
-                    onClick={() => table.setPageIndex(0)}
-                    disabled={!table.getCanPreviousPage()}
-                >
-                    <ChevronsLeft />
-                </button>
-                <button
-                    className='border rounded p-1'
-                    onClick={() => table.previousPage()}
-                    disabled={!table.getCanPreviousPage()}
-                >
-                    <ChevronLeft />
-                </button>
-                <button
-                    className='border rounded p-1'
-                    onClick={() => table.nextPage()}
-                    disabled={!table.getCanNextPage()}
-                >
-                    <ChevronRight />
-                </button>
-                <button
-                    className='border rounded p-1'
-                    onClick={() => table.setPageIndex(table.getPageCount() - 1)}
-                    disabled={!table.getCanNextPage()}
-                >
-                    <ChevronsRight />
-                </button>
-                <span className='d-flex align-items-center gap-1'>
-                    <div>Página</div>
-                    <strong>
-                        {table.getState().pagination.pageIndex + 1} de{' '}
-                        {table.getPageCount()}
-                    </strong>
-                </span>
-            </div>
+                                            })
+                                        }
+                                    </tr>
+                                ))
+                            }
+                        </thead >
+                        <tbody>
+                            {
+                                table.getRowModel().rows.map(row => (
+                                    <tr key={row.id}>
+                                        {
+                                            row.getVisibleCells().map(cell => (
+                                                <td key={cell.id}>
+                                                    {
+                                                        flexRender(
+                                                            cell.column.columnDef.cell,
+                                                            cell.getContext()
+                                                        )
+                                                    }
+                                                </td>
+                                            ))
+                                        }
+                                    </tr>
+                                ))
+                            }
+                        </tbody>
+                    </table >
+                )
+            }
+            {!isLoading && (
+                <div className='d-flex align-items-center justify-content-center gap-2 mb-4'>
+                    <button
+                        className='border rounded p-1'
+                        onClick={() => table.setPageIndex(0)}
+                        disabled={!table.getCanPreviousPage()}
+                    >
+                        <ChevronsLeft />
+                    </button>
+                    <button
+                        className='border rounded p-1'
+                        onClick={() => table.previousPage()}
+                        disabled={!table.getCanPreviousPage()}
+                    >
+                        <ChevronLeft />
+                    </button>
+                    <button
+                        className='border rounded p-1'
+                        onClick={() => table.nextPage()}
+                        disabled={!table.getCanNextPage()}
+                    >
+                        <ChevronRight />
+                    </button>
+                    <button
+                        className='border rounded p-1'
+                        onClick={() => table.setPageIndex(table.getPageCount() - 1)}
+                        disabled={!table.getCanNextPage()}
+                    >
+                        <ChevronsRight />
+                    </button>
+                    <span className='d-flex align-items-center gap-1'>
+                        <div>Página</div>
+                        <strong>
+                            {table.getState().pagination.pageIndex + 1} de{' '}
+                            {table.getPageCount()}
+                        </strong>
+                    </span>
+                </div>
+            )}
         </>
     )
 }
