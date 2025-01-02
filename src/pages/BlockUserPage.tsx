@@ -48,7 +48,7 @@ const BlockUserPage: FC = () => {
                             </p>
                         </div>
 
-                        <form onSubmit={handleSubmit}>
+                        <form onSubmit={handleSubmit} autoComplete='off'>
                             <div className='mb-4'>
                                 <label htmlFor='name' className='form-label'>
                                     Nombre
